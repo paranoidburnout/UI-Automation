@@ -9,7 +9,7 @@ Feature: When user move the sliders function on drag-and-drop Range
 
   Scenario: Сheck the functionality of the left and right slider
     And Opened through the left menu Service -> Dates
-    When User clicked on the left slider and drag him to 70
-    And On the right slider and drag him to 80 user clicked
-#    Then The "left" slider has been successfully moved
-#    And The right slider has been successfully moved
+    When User clicked on the left slider and drag it to 70
+    And On the right slider and drag it to 80 user clicked
+    Then The "left" slider has been successfully moved
+    And The "right" slider has been successfully moved
