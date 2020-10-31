@@ -1,6 +1,7 @@
 package presence;
 
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -8,38 +9,40 @@ import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
+import static org.junit.Assert.assertEquals;
 
 public class HomePage {
+    public static final String URL = "https://jdi-framework.github.io/tests/index.htm";
 
     @When("^User open the home page$")
     public void openHomePage() throws Throwable {
-        open("https://jdi-framework.github.io/tests/index.htm");
+        open(URL);
     }
 
     @Then("^4 images was displayed$")
     public void checkImagesExistence() {
-        $(By.xpath("//span[contains(@class,'icon-practise')]")).shouldBe(visible).click();
-        $(By.xpath("//span[contains(@class,'icon-custom')]")).shouldBe(visible).click();
-        $(By.xpath("//span[contains(@class,'icon-multi')]")).shouldBe(visible).click();
-        $(By.xpath("//span[contains(@class, 'icon-base')]")).shouldBe(visible).click();
+        images.forEach(image -> image.shouldBe(visible));
+        assertEquals(images.size(), 4);
     }
 
     @And("^4 text was displayed below 4 Icons$")
     public void checkTextBelowIcons() {
-        ElementsCollection texts =
-                $$(By.xpath("//span[contains(@class, 'benefit-txt')]"))
-                        .shouldHaveSize(4);
-        texts.forEach(element -> element.should(visible));
+        texts.forEach(text -> text.shouldBe(visible));
+        assertEquals(texts.size(), 4);
     }
 
     @And("^Main title text center was displayed$")
     public void checkMainTitleTextCenter() {
-        $(By.xpath(" //h3[contains(@class, 'main-title text-center')]")).shouldBe(visible).click();
+        mainTitleTextCenter.click();
     }
 
     @And("^Below main title text center was displayed$")
     public void checkBelowMainTitleTextCenter() {
-        $(By.xpath("//p[contains(@class, 'main-txt text-center')]")).shouldBe(visible).click();
+        belowMainTitleTextCenter.click();
     }
 
+    ElementsCollection images = $$(".benefit-icon span");
+    ElementsCollection texts = $$(By.xpath("//span[contains(@class, 'benefit-txt')]"));
+    SelenideElement mainTitleTextCenter = $(By.xpath("//h3[contains(@class, 'main-title text-center')]"));
+    SelenideElement belowMainTitleTextCenter = $(By.xpath("//p[contains(@class, 'main-txt text-center')]"));
 }

@@ -1,6 +1,7 @@
 package presence;
 
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -8,53 +9,55 @@ import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
-
-
+import static org.junit.Assert.assertEquals;
 
 public class ElementsOnTheServicePage {
     @When("^User opened through the header menu Service -> Different Elements Page$")
     public void openDifferentElementsPage() {
-        $(By.cssSelector(".sidebar-menu .sub-menu")).shouldBe(visible).click();
-        $(By.cssSelector(".sub-menu [href = 'page8.htm']")).shouldBe(visible).click();
+        pageService.click();
+        differentElementPage.click();
     }
 
     @Then("^Interface on Service page contain 4 checkboxes was displayed$")
     public void check4CheckboxesOnServicePage() {
-        ElementsCollection checkboxes =
-                $$(By.xpath("//label[@class= 'label-checkbox']"))
-                        .shouldHaveSize(4);
-        checkboxes.forEach(checkbox -> checkbox.should(visible));
+        labelCheckboxes.forEach(checkbox -> checkbox.shouldBe(visible));
+        assertEquals(labelCheckboxes.size(), 4);
     }
 
     @And("^4 radios was displayed$")
     public void check4RadiosOnServicePage() {
-        ElementsCollection radios =
-                $$(By.xpath("//label[@class= 'label-radio']"))
-                        .shouldHaveSize(4);
-        radios.forEach(radio -> radio.should(visible));
+        labelRadios.forEach(radio -> radio.shouldBe(visible));
+        assertEquals(labelRadios.size(), 4);
     }
 
     @And("^Dropdown was displayed$")
-
     public void checkDropdownOnServicePage() {
-        $(By.xpath("//select[@class='uui-form-element']")).shouldBe(visible);
+        uuiFormElement.shouldBe(visible);
     }
 
     @And("^2 - buttons was displayed$")
     public void buttons2OnServicePage() {
-        ElementsCollection buttons =
-                $$(By.cssSelector(".main-content .uui-button"))
-                        .shouldHaveSize(2);
-        buttons.forEach(button -> button.should(visible));
+        uuiButtons.forEach(button -> button.shouldBe(visible));
+        assertEquals(uuiButtons.size(), 2);
     }
 
     @And("^Left section was displayed$")
     public void leftSectionOnServicePage() {
-        $(By.xpath("//div[@id='mCSB_1']")).shouldBe(visible);
+        leftSection.shouldBe(visible);
     }
 
     @And("^Right section was displayed$")
     public void rightSectionOnServicePage() {
-        $(By.xpath("//div[@id='mCSB_2']")).shouldBe(visible);
+        rightSection.shouldBe(visible);
     }
+
+    SelenideElement pageService = $(".sidebar-menu .sub-menu");
+    SelenideElement differentElementPage = $(".sub-menu [href = 'page8.htm']");
+    ElementsCollection labelCheckboxes = $$(By.xpath("//label[@class= 'label-checkbox']"));
+    ElementsCollection labelRadios = $$(By.xpath("//label[@class= 'label-radio']"));
+    SelenideElement uuiFormElement = $(By.xpath("//select[@class='uui-form-element']"));
+    ElementsCollection uuiButtons = $$(".main-content .uui-button");
+    SelenideElement leftSection = $(By.xpath("//div[@id='mCSB_1']"));
+    SelenideElement rightSection = $(By.xpath("//div[@id='mCSB_2']"));
+
 }

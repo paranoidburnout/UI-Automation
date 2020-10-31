@@ -1,6 +1,5 @@
 package functionality;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -18,38 +17,36 @@ public class Sliders {
 
     @And("^Opened through the left menu Service -> Dates$")
     public void openedServiceAndDatesPages() {
-        $(By.xpath("//a/span[contains(text(),'Service')]")).shouldBe(visible).click();
-        $(By.xpath("//a/p/span[contains(text(),'Dates')]")).shouldBe(visible).click();
+        pageService.shouldBe(visible).click();
+        pageDates.shouldBe(visible).click();
     }
 
     @When("User clicked on the left slider and drag it to {int}")
     public void movingTheLeftSlider(int sliderLeft) {
         sliderL = sliderLeft;
-        SelenideElement left = $("div:nth-child(2) > div > a:nth-child(1)");
-        left.scrollIntoView(true);
-        actions().dragAndDropBy(left, -276, 0).build().perform();
-        actions().dragAndDropBy(left, (int) ((sliderLeft * 2.64)), 0).build().perform();
+        leftSlider.scrollIntoView(true);
+        actions().dragAndDropBy(leftSlider, -276, 0).build().perform();
+        actions().dragAndDropBy(leftSlider, (int) ((sliderLeft * 2.64)), 0).build().perform();
     }
 
     @And("On the right slider and drag it to {int} user clicked")
     public void movingTheRightSlider(int sliderRight) {
         sliderR = sliderRight;
-        SelenideElement right = $("div:nth-child(2) > div > a:nth-child(3)");
-        right.scrollIntoView(true);
-        int currentPercentage = Integer.parseInt(right.getText());
+        rightSlider.scrollIntoView(true);
+        int currentPercentage = Integer.parseInt(rightSlider.getText());
         int diff = currentPercentage - sliderRight;
-        actions().dragAndDropBy(right, (int) ((-(diff) * 2.64)), 0).build().perform();
-        int newCurrentPercentage = Integer.parseInt(right.getText());
+        actions().dragAndDropBy(rightSlider, (int) ((-(diff) * 2.64)), 0).build().perform();
+        int newCurrentPercentage = Integer.parseInt(rightSlider.getText());
         if (newCurrentPercentage > sliderRight) {
-            while (newCurrentPercentage > sliderRight) {
-                actions().dragAndDropBy(right, -5, 0).build().perform();
-                int finalNewCurrentPercentage = Integer.parseInt(right.getText());
+            while (true) {
+                actions().dragAndDropBy(rightSlider, -5, 0).build().perform();
+                int finalNewCurrentPercentage = Integer.parseInt(rightSlider.getText());
                 if (finalNewCurrentPercentage == sliderRight) break;
             }
         } else if (newCurrentPercentage < sliderRight) {
-            while (newCurrentPercentage < sliderRight) {
-                actions().dragAndDropBy(right, 5, 0).build().perform();
-                int finalNewCurrentPercentage = Integer.parseInt(right.getText());
+            while (true) {
+                actions().dragAndDropBy(rightSlider, 5, 0).build().perform();
+                int finalNewCurrentPercentage = Integer.parseInt(rightSlider.getText());
                 if (finalNewCurrentPercentage == sliderRight) break;
             }
         }
@@ -57,16 +54,18 @@ public class Sliders {
 
     @Then("The \"([^\"]*)\" slider has been successfully moved$")
     public void leftSliderHasBeenSuccessfullyMoved(String slider) {
-        SelenideElement left = $("div:nth-child(2) > div > a:nth-child(1)");
-        SelenideElement right = $("div:nth-child(2) > div > a:nth-child(3)");
-
         switch (slider) {
             case "left":
-                left.shouldHave(matchText(Integer.toString(sliderL)));
+                leftSlider.shouldHave(matchText(Integer.toString(sliderL)));
                 break;
             case "right":
-                right.shouldHave(matchText(Integer.toString(sliderR)));
+                rightSlider.shouldHave(matchText(Integer.toString(sliderR)));
                 break;
         }
     }
+
+    SelenideElement pageService = $(By.xpath("//a/span[contains(text(),'Service')]"));
+    SelenideElement pageDates = $(By.xpath("//a/p/span[contains(text(),'Dates')]"));
+    SelenideElement leftSlider = $("div:nth-child(2) > div > a:nth-child(1)");
+    SelenideElement rightSlider = $("div:nth-child(2) > div > a:nth-child(3)");
 }
