@@ -13,7 +13,7 @@ public class CommonPageSteps {
     public static final String URL = "https://jdi-framework.github.io/tests/index.htm";
 
     @Given("^Page opened$")
-    public void openLink() throws Throwable {
+    public void openLink(){
         open(URL);
     }
 

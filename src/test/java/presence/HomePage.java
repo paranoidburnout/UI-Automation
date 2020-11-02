@@ -15,7 +15,7 @@ public class HomePage {
     public static final String URL = "https://jdi-framework.github.io/tests/index.htm";
 
     @When("^User open the home page$")
-    public void openHomePage() throws Throwable {
+    public void openHomePage() {
         open(URL);
     }
 
